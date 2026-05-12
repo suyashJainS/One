@@ -1,2 +1,18 @@
 .claude/settings.local.json
 .superpowers/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+.venv/
+.env
+
+# Django
+staticfiles/
+media/
+
+# uv
+.python-version
+
