@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { font-family: theme('fontFamily.sans'); -webkit-font-smoothing: antialiased; }
+  body { @apply bg-surface-alt text-ink; }
+}
+
+@layer components {
+  .stripe-card { @apply bg-surface rounded border border-surface-border shadow-card; }
+}
