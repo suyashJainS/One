@@ -79,7 +79,7 @@ django_settings_module = "one.settings.test"
 DJANGO_SETTINGS_MODULE = "one.settings.test"
 python_files = ["test_*.py", "tests.py", "*_test.py"]
 addopts = "--strict-markers --strict-config --reuse-db"
-filterwarnings = ["error", "ignore::DeprecationWarning:django.*"]
+filterwarnings = ["error", "ignore::DeprecationWarning:django.*", "ignore:No directory at.*:UserWarning"]
 
 [tool.coverage.run]
 source = ["apps", "services", "one"]
