@@ -68,6 +68,10 @@ strict = true
 plugins = ["mypy_django_plugin.main"]
 exclude = ["migrations/"]
 
+[[tool.mypy.overrides]]
+module = ["environ", "environ.*"]
+ignore_missing_imports = true
+
 [tool.django-stubs]
 django_settings_module = "one.settings.test"
 

@@ -1,11 +1,12 @@
 """Test settings — used by pytest."""
+
 from .base import *  # noqa: F403
 
 DEBUG = False
 SECRET_KEY = "test-insecure-key"  # noqa: S105
 ALLOWED_HOSTS = ["*"]
 
-DATABASES["default"]["NAME"] = "test_one"  # noqa: F405
+DATABASES["default"].setdefault("TEST", {})["NAME"] = "test_one"  # noqa: F405
 
 PASSWORD_HASHERS = ["django.contrib.auth.hashers.MD5PasswordHasher"]
 EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
