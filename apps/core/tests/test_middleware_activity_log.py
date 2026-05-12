@@ -15,7 +15,6 @@ def test_activity_log_written_on_request(client: Client) -> None:
     assert log.request_id  # populated from RequestIDMiddleware
 
 
-@pytest.mark.skip(reason="D7 not yet implemented — /healthz view pending")
 @pytest.mark.django_db
 def test_activity_log_skips_static_and_healthz(client: Client) -> None:
     client.get("/healthz")

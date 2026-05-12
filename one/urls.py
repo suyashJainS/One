@@ -2,6 +2,9 @@ from django.contrib import admin
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from django.urls import include, path
+from django.views.generic import TemplateView
+
+from apps.core.views import healthz
 
 
 def root(request: HttpRequest) -> HttpResponse:
@@ -10,6 +13,8 @@ def root(request: HttpRequest) -> HttpResponse:
 
 urlpatterns = [
     path("", root),
+    path("healthz", healthz),
+    path("robots.txt", TemplateView.as_view(template_name="robots.txt", content_type="text/plain")),
     path("admin/", admin.site.urls),
     path("auth/", include("allauth.urls")),
 ]
