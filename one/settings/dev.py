@@ -1,4 +1,5 @@
 """Development settings — local machine."""
+
 from .base import *  # noqa: F403
 
 DEBUG = True
@@ -21,5 +22,7 @@ LOGGING = {
 }
 
 # Dev FERNET_KEY (regenerate per developer if rotated)
-import base64, os  # noqa: E402
-CRYPTOGRAPHY_KEY = CRYPTOGRAPHY_KEY or base64.urlsafe_b64encode(os.urandom(32)).decode()
+import base64  # noqa: E402
+import os  # noqa: E402
+
+CRYPTOGRAPHY_KEY = CRYPTOGRAPHY_KEY or base64.urlsafe_b64encode(os.urandom(32)).decode()  # noqa: F405
