@@ -394,7 +394,10 @@ USE_TZ = True
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [BASE_DIR / "static"]
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STORAGES = {
+    "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
+    "staticfiles": {"BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"},
+}
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
@@ -531,7 +534,7 @@ DEBUG = False
 SECRET_KEY = "test-insecure-key"  # noqa: S105
 ALLOWED_HOSTS = ["*"]
 
-DATABASES["default"]["NAME"] = "test_one"  # noqa: F405
+DATABASES["default"].setdefault("TEST", {})["NAME"] = "test_one"  # noqa: F405
 
 PASSWORD_HASHERS = ["django.contrib.auth.hashers.MD5PasswordHasher"]
 EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
@@ -6047,4 +6050,3 @@ Plan complete and saved to `docs/superpowers/plans/2026-05-13-cycle-1-foundation
 **2. Inline Execution** — Execute tasks in this session using `superpowers:executing-plans`. Batches execution with checkpoints. Faster but more context cost per task.
 
 **Which approach?**
-
