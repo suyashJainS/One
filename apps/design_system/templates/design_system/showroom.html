@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Design system{% endblock %}
+{% block content %}
+<c-page-header title="Design system" subtitle="Cycle 1 component reference" />
+
+<h2 class="mt-8 mb-3 text-lg font-semibold">Buttons</h2>
+<div class="flex gap-2">
+  <c-button>Primary</c-button>
+  <c-button variant="secondary">Secondary</c-button>
+  <c-button variant="ghost">Ghost</c-button>
+  <c-button variant="danger">Danger</c-button>
+</div>
+
+<h2 class="mt-8 mb-3 text-lg font-semibold">Stat cards</h2>
+<div class="grid grid-cols-4 gap-4">
+  <c-stat-card label="Spend" value="$24,180" delta="8.2" delta_direction="up" />
+  <c-stat-card label="ROAS" value="2.7×" delta="3" delta_direction="up" />
+  <c-stat-card label="Leads" value="1,240" delta="4" delta_direction="down" />
+  <c-stat-card label="CPL" value="$8.10" delta="0.2" delta_direction="up" />
+</div>
+
+<h2 class="mt-8 mb-3 text-lg font-semibold">Cards / empty state / skeleton</h2>
+<div class="grid grid-cols-3 gap-4">
+  <c-card>Plain card</c-card>
+  <c-empty-state title="Nothing yet" description="Add a client to get started." />
+  <c-card>
+    <c-skeleton height="4" />
+    <c-skeleton height="4" class="mt-2" />
+  </c-card>
+</div>
+
+<h2 class="mt-8 mb-3 text-lg font-semibold">Form field</h2>
+<c-card>
+  <c-form-field label="Email" name="email" type="email" />
+</c-card>
+
+<h2 class="mt-8 mb-3 text-lg font-semibold">Data table</h2>
+<c-data-table columns="Client,Spend,ROAS,CPL">
+  <tr>
+    <td class="px-4 py-2">Acme</td>
+    <td class="px-4 py-2">$2,140</td>
+    <td class="px-4 py-2">3.4×</td>
+    <td class="px-4 py-2">$12.40</td>
+  </tr>
+  <tr>
+    <td class="px-4 py-2">Beam Labs</td>
+    <td class="px-4 py-2">$890</td>
+    <td class="px-4 py-2">2.8×</td>
+    <td class="px-4 py-2">$8.10</td>
+  </tr>
+</c-data-table>
+
+<h2 class="mt-8 mb-3 text-lg font-semibold">Toasts</h2>
+<div class="space-y-2">
+  <c-toast variant="success">Saved</c-toast>
+  <c-toast variant="warn">Heads up</c-toast>
+  <c-toast variant="danger">Failed</c-toast>
+</div>
+
+<h2 class="mt-8 mb-3 text-lg font-semibold">Sparkline</h2>
+<c-card>
+  <c-sparkline id="ds-spark-1" :data="[10,12,9,14,18,17,21]" />
+</c-card>
+{% endblock %}

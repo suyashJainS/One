@@ -1,1 +1,29 @@
 .claude/settings.local.json
+.superpowers/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+.venv/
+.env
+
+# Django
+staticfiles/
+media/
+
+# Frontend / Node
+node_modules/
+static/dist/
+
+# Test / lint caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+
+# Playwright
+playwright-report/
+test-results/

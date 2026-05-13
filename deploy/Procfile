@@ -1,0 +1,4 @@
+web:     gunicorn one.wsgi:application --workers 3 --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT --access-logfile - --error-logfile -
+worker:  celery -A one worker -l info --concurrency=2
+beat:    celery -A one beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+release: python manage.py migrate --noinput && python manage.py collectstatic --noinput

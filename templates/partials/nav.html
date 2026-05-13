@@ -1,0 +1,15 @@
+<nav class="border-b border-surface-border bg-surface">
+  <div class="mx-auto max-w-7xl px-6 py-3 flex items-center gap-6 text-sm">
+    <a href="/" class="font-semibold text-ink">One</a>
+    {% if user.is_authenticated %}
+      <a href="/dashboard/" class="text-ink-muted hover:text-ink">Dashboard</a>
+      <a href="/clients/" class="text-ink-muted hover:text-ink">Clients</a>
+      <form action="/auth/logout/" method="post" class="ml-auto">
+        {% csrf_token %}
+        <button class="text-ink-muted hover:text-ink" type="submit">Sign out</button>
+      </form>
+    {% else %}
+      <a href="/auth/login/" class="ml-auto text-ink-muted hover:text-ink">Sign in</a>
+    {% endif %}
+  </div>
+</nav>

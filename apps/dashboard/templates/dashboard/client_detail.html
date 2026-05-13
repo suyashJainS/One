@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<c-page-header title="{{ client.name }}" subtitle="{{ since }} → {{ until }}" />
+
+<form method="get" class="mb-4">
+  <c-date-range name_from="since" name_to="until" value_from="{{ since }}" value_to="{{ until }}" />
+  <c-button type="submit" variant="secondary" class="mt-2">Apply</c-button>
+</form>
+
+<c-card class="mb-6">
+  <h3 class="text-sm font-semibold text-ink mb-2">Spend trend</h3>
+  <div data-chart-target="spend-trend" style="height:280px"></div>
+  <script type="application/json" data-chart-id="spend-trend">
+    {
+      "chart": {"type": "line", "height": 280, "toolbar": {"show": false}},
+      "stroke": {"width": 2, "curve": "smooth"},
+      "colors": ["#4f46e5"],
+      "series": [{"name": "Spend", "data": {{ chart_spend|safe }}}],
+      "xaxis": {"categories": {{ chart_labels|safe }}},
+      "grid": {"borderColor": "#e2e8f0"}
+    }
+  </script>
+</c-card>
+
+<c-data-table columns="Date,Account,Spend,Purchases,Purchase value,ROAS,Leads,CPL">
+  {% for r in rows %}
+    <tr>
+      <td class="px-4 py-2">{{ r.date }}</td>
+      <td class="px-4 py-2 text-ink-muted">{{ r.account.account_name|default:r.account.account_id }}</td>
+      <td class="px-4 py-2">${{ r.spend|floatformat:2 }}</td>
+      <td class="px-4 py-2">{{ r.purchases }}</td>
+      <td class="px-4 py-2">${{ r.purchase_value|floatformat:2 }}</td>
+      <td class="px-4 py-2">{{ r.roas|default:'—'|floatformat:2 }}</td>
+      <td class="px-4 py-2">{{ r.leads }}</td>
+      <td class="px-4 py-2">{{ r.cost_per_lead|default:'—'|floatformat:2 }}</td>
+    </tr>
+  {% endfor %}
+</c-data-table>
+{% endblock %}

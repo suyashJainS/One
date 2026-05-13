@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<c-page-header title="Dashboard" subtitle="Today vs yesterday across all active clients">
+  <a href="{% url 'dashboard:export-csv' %}"><c-button variant="secondary">Export CSV</c-button></a>
+</c-page-header>
+
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+  <c-stat-card label="Spend today" value="${{ kpi_today.spend|floatformat:0 }}" />
+  <c-stat-card label="ROAS today" value="{{ kpi_today.roas|default:'—'|floatformat:2 }}{% if kpi_today.roas %}×{% endif %}" />
+  <c-stat-card label="Leads today" value="{{ kpi_today.leads }}" />
+  <c-stat-card label="CPL today" value="{% if kpi_today.cpl %}${{ kpi_today.cpl|floatformat:2 }}{% else %}—{% endif %}" />
+</div>
+
+{% if clients %}
+<c-data-table columns="Client,Spend (today),Spend (yest.),ROAS,Leads,Accounts,Actions">
+  {% for s in clients %}
+    {% include "dashboard/_client_row.html" with summary=s %}
+  {% endfor %}
+</c-data-table>
+{% else %}
+<c-empty-state title="No clients yet" description="Add a client first to start seeing metrics.">
+  <a href="/clients/new/"><c-button>+ Add client</c-button></a>
+</c-empty-state>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<c-page-header title="{% if is_new %}New client{% else %}Edit {{ client.name }}{% endif %}" />
+<c-card>
+  <form method="post">
+    {% csrf_token %}
+    {% for field in form %}
+      {% if field.name != "access_token" %}
+        <c-form-field
+          label="{{ field.label }}"
+          name="{{ field.name }}"
+          type="{{ field.field.widget.input_type|default:'text' }}"
+          value="{{ field.value|default_if_none:'' }}"
+          error="{{ field.errors|join:', ' }}" />
+      {% endif %}
+    {% endfor %}
+
+    {# Render access_token via Django's widget so PasswordInput.render_value=False suppresses re-fill on validation errors #}
+    <div class="mb-4">
+      <label for="{{ form.access_token.id_for_label }}" class="mb-1 block text-sm font-medium text-ink">{{ form.access_token.label }}</label>
+      {{ form.access_token }}
+      {% if form.access_token.errors %}
+        <p class="mt-1 text-xs text-red-600">{{ form.access_token.errors|join:", " }}</p>
+      {% endif %}
+      {% if form.access_token.help_text %}
+        <p class="mt-1 text-xs text-ink-muted">{{ form.access_token.help_text }}</p>
+      {% endif %}
+    </div>
+
+    <div class="flex justify-end gap-2"><c-button type="submit">Save</c-button></div>
+  </form>
+</c-card>
+{% endblock %}

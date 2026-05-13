@@ -1,0 +1,7 @@
+<c-vars variant="primary" size="md" type="button" />
+
+<button type="{{ type }}"
+        class="{% if variant == 'primary' %}bg-brand-600 text-white hover:bg-brand-700{% elif variant == 'secondary' %}bg-surface text-ink border border-surface-border hover:bg-surface-alt{% elif variant == 'ghost' %}bg-transparent text-ink hover:bg-surface-alt{% elif variant == 'danger' %}bg-red-600 text-white hover:bg-red-700{% endif %} {% if size == 'sm' %}px-2 py-1 text-xs rounded{% elif size == 'lg' %}px-4 py-2 text-base rounded{% else %}px-3 py-1.5 text-sm rounded{% endif %} inline-flex items-center gap-2 font-medium transition-colors {{ class }}"
+        {{ attrs }}>
+  {{ slot }}
+</button>

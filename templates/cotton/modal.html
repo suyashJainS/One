@@ -1,0 +1,11 @@
+<c-vars id="modal" title="" />
+<dialog id="{{ id }}" class="rounded-lg p-0 shadow-modal backdrop:bg-ink/30">
+  <div class="w-[420px] max-w-[90vw]">
+    <header class="flex items-center justify-between border-b border-surface-border px-4 py-3">
+      <h2 class="text-sm font-semibold text-ink">{{ title }}</h2>
+      <button type="button" class="text-ink-muted hover:text-ink"
+              onclick="document.getElementById('{{ id }}').close()">&times;</button>
+    </header>
+    <div class="p-4">{{ slot }}</div>
+  </div>
+</dialog>

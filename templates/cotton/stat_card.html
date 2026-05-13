@@ -1,0 +1,11 @@
+<c-vars label="" value="" delta="" delta_direction="" />
+<div class="stripe-card p-4">
+  <div class="text-2xs uppercase tracking-wide text-ink-muted">{{ label }}</div>
+  <div class="mt-1 text-xl font-semibold text-ink">{{ value }}</div>
+  {% if delta %}
+    <div class="mt-1 text-2xs {% if delta_direction == 'up' %}text-emerald-600{% elif delta_direction == 'down' %}text-red-600{% else %}text-ink-muted{% endif %}">
+      {% if delta_direction == 'up' %}&#9650;{% elif delta_direction == 'down' %}&#9660;{% endif %} {{ delta }}%
+    </div>
+  {% endif %}
+  {% if slot %}<div class="mt-2">{{ slot }}</div>{% endif %}
+</div>

@@ -1,0 +1,6 @@
+<c-vars title="" description="" />
+<div class="stripe-card p-12 text-center">
+  <h2 class="text-base font-semibold text-ink">{{ title }}</h2>
+  {% if description %}<p class="mt-1 text-sm text-ink-muted">{{ description }}</p>{% endif %}
+  {% if slot %}<div class="mt-4">{{ slot }}</div>{% endif %}
+</div>

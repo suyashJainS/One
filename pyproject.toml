@@ -1,0 +1,107 @@
+[project]
+name = "one"
+version = "0.1.0"
+description = "Performance Marketing Portal — Cycle 1"
+requires-python = ">=3.13"
+dependencies = [
+  "Django>=5.2,<5.3",
+  "django-allauth[socialaccount]>=65.0",
+  "django-cotton>=1.4",
+  "django-htmx>=1.19",
+  "django-csp>=3.8",
+  "django-ratelimit>=4.1",
+"django-solo>=2.4",
+  "django-celery-beat>=2.7",
+  "django-prometheus>=2.3",
+  "django-environ>=0.11",
+  "psycopg[binary,pool]>=3.2",
+  "redis>=5.0",
+  "celery>=5.4",
+  "httpx>=0.27",
+  "tenacity>=9.0",
+  "structlog>=24.1",
+  "sentry-sdk[django,celery]>=2.0",
+  "gunicorn>=23.0",
+  "uvicorn[standard]>=0.30",
+  "whitenoise[brotli]>=6.7",
+  "pillow>=10.4",
+]
+
+[dependency-groups]
+dev = [
+  "pytest>=8.3",
+  "pytest-django>=4.9",
+  "pytest-cov>=5.0",
+  "pytest-xdist>=3.6",
+  "factory-boy>=3.3",
+  "responses>=0.25",
+  "freezegun>=1.5",
+  "ruff>=0.6",
+  "mypy>=1.11",
+  "django-stubs[compatible-mypy]>=5.0",
+  "django-migration-linter>=5.1",
+  "pip-audit>=2.7",
+  "django-debug-toolbar>=4.4",
+  "pre-commit>=3.8",
+  "playwright>=1.47",
+  "respx>=0.23.1",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "DJ", "S", "RUF", "PL", "PT"]
+ignore = ["S101", "PLR0913", "PLC0415"]  # allow asserts in tests, allow many args, allow imports in ready()
+
+[tool.ruff.lint.per-file-ignores]
+"**/tests/**" = ["S105", "S106", "PLR2004"]
+"**/migrations/*.py" = ["E501", "RUF012"]
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.mypy]
+python_version = "3.13"
+strict = true
+plugins = ["mypy_django_plugin.main"]
+exclude = ["migrations/"]
+
+[[tool.mypy.overrides]]
+module = ["environ", "environ.*"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["django_cotton", "django_cotton.*"]
+ignore_missing_imports = true
+ignore_errors = true
+
+[[tool.mypy.overrides]]
+module = ["celery", "celery.*", "django_celery_beat", "django_celery_beat.*"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = [
+  "apps.design_system.tests.*",
+  "apps.accounts.tests.*",
+  "apps.clients.tests.*",
+  "apps.dashboard.tests.*",
+]
+ignore_errors = true
+
+[tool.django-stubs]
+django_settings_module = "one.settings.test"
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "one.settings.test"
+python_files = ["test_*.py", "tests.py", "*_test.py"]
+addopts = "--strict-markers --strict-config --reuse-db"
+filterwarnings = ["error", "ignore::DeprecationWarning:django.*", "ignore:No directory at.*:UserWarning"]
+
+[tool.coverage.run]
+source = ["apps", "services", "one"]
+omit = ["*/migrations/*", "*/tests/*", "manage.py"]
+
+[tool.coverage.report]
+exclude_lines = ["pragma: no cover", "raise NotImplementedError"]

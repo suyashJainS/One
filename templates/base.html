@@ -1,0 +1,29 @@
+{% load static %}
+{% load django_htmx %}
+<!doctype html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex" />
+  <meta name="csrf-token" content="{{ csrf_token }}" />
+  <title>{% block title %}One — Performance Marketing Portal{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'dist/assets/styles.css' %}" />
+  <script type="module" src="{% static 'dist/assets/app.js' %}" defer></script>
+  {% django_htmx_script %}
+  {% block head_extra %}{% endblock %}
+</head>
+<body class="min-h-full bg-surface-alt text-ink antialiased">
+  {% include "partials/nav.html" %}
+  <main class="mx-auto max-w-7xl px-6 py-8">
+    {% if messages %}
+      <div class="mb-4 space-y-2">
+        {% for message in messages %}
+          <div class="rounded border border-surface-border bg-surface px-4 py-2 text-sm">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>
