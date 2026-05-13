@@ -148,13 +148,19 @@ SOCIALACCOUNT_PROVIDERS = {
     },
 }
 
-# CSP — overridden per env
-CSP_DEFAULT_SRC = ("'self'",)
-CSP_SCRIPT_SRC = ("'self'",)
-CSP_STYLE_SRC = ("'self'", "'unsafe-inline'")
-CSP_IMG_SRC = ("'self'", "data:", "https:")
-CSP_CONNECT_SRC = ("'self'",)
-CSP_FONT_SRC = ("'self'", "data:")
+# CSP — django-csp 4.x new-style config (overridden per env)
+from csp.constants import NONCE  # noqa: E402
+
+CONTENT_SECURITY_POLICY = {
+    "DIRECTIVES": {
+        "default-src": ["'self'"],
+        "script-src": ["'self'", NONCE],
+        "style-src": ["'self'", "'unsafe-inline'"],
+        "img-src": ["'self'", "data:", "https:"],
+        "connect-src": ["'self'"],
+        "font-src": ["'self'", "data:"],
+    },
+}
 
 # Encryption (django-cryptography)
 CRYPTOGRAPHY_KEY = env("FERNET_KEY", default=None)
@@ -172,3 +178,14 @@ OWNER_EMAILS = env.list("OWNER_EMAILS", default=[])
 # Facebook / Meta OAuth (allauth socialaccount)
 FACEBOOK_OAUTH_CLIENT_ID = env("FACEBOOK_OAUTH_CLIENT_ID", default="")
 FACEBOOK_OAUTH_CLIENT_SECRET = env("FACEBOOK_OAUTH_CLIENT_SECRET", default="")
+
+# allauth rate limits
+ACCOUNT_RATE_LIMITS = {
+    "login_failed": "5/m",
+    "signup": "20/h",
+    "send_email": "5/m/key",
+    "change_password": "5/m",
+    "manage_email": "10/m",
+    "reset_password": "5/m",
+    "confirm_email": "5/m",
+}
