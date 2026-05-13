@@ -2,11 +2,14 @@
 
 from __future__ import annotations
 
+import logging
 import time
 import uuid
 from collections.abc import Callable
 
 from django.http import HttpRequest, HttpResponse
+
+logger = logging.getLogger(__name__)
 
 
 class RequestIDMiddleware:
@@ -16,7 +19,8 @@ class RequestIDMiddleware:
         self.get_response = get_response
 
     def __call__(self, request: HttpRequest) -> HttpResponse:
-        request_id = request.headers.get(self.HEADER) or str(uuid.uuid4())
+        incoming = (request.headers.get(self.HEADER) or "")[:64]
+        request_id = incoming or str(uuid.uuid4())
         request.request_id = request_id  # type: ignore[attr-defined]
         response = self.get_response(request)
         response[self.HEADER] = request_id
@@ -61,17 +65,20 @@ class ActivityLogMiddleware:
         else:
             level = "error"
 
-        ActivityLog.objects.create(
-            user=request.user if request.user.is_authenticated else None,
-            level=level,
-            path=request.path[:512],
-            method=request.method or "",
-            status_code=response.status_code,
-            ip_address=_client_ip(request),
-            user_agent=request.META.get("HTTP_USER_AGENT", "")[:512],
-            duration_ms=duration_ms,
-            request_id=getattr(request, "request_id", "")[:64],
-        )
+        try:
+            ActivityLog.objects.create(
+                user=request.user if request.user.is_authenticated else None,
+                level=level,
+                path=request.path[:512],
+                method=request.method or "",
+                status_code=response.status_code,
+                ip_address=_client_ip(request),
+                user_agent=request.META.get("HTTP_USER_AGENT", "")[:512],
+                duration_ms=duration_ms,
+                request_id=getattr(request, "request_id", "")[:64],
+            )
+        except Exception:
+            logger.exception("ActivityLog write failed")
         return response
 
 

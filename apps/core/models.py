@@ -96,4 +96,5 @@ class APIRequestLog(models.Model):
     def save(self, *args: Any, **kwargs: Any) -> None:
         self.query_params = _redact(self.query_params)
         self.request_body = _redact(self.request_body)
+        self.response_body = _redact(self.response_body)
         super().save(*args, **kwargs)
