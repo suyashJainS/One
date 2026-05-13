@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib import admin
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
@@ -22,3 +23,11 @@ urlpatterns = [
     path("clients/", include("apps.clients.urls")),
     path("dashboard/", include("apps.dashboard.urls")),
 ]
+
+if settings.DEBUG:
+    try:
+        import debug_toolbar
+
+        urlpatterns = [path("__debug__/", include(debug_toolbar.urls)), *urlpatterns]
+    except ImportError:
+        pass

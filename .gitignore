@@ -23,3 +23,7 @@ static/dist/
 .ruff_cache/
 .coverage
 coverage.xml
+
+# Playwright
+playwright-report/
+test-results/
