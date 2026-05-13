@@ -55,7 +55,7 @@ def client_detail(request: HttpRequest, slug: str) -> HttpResponse:
 def refresh_account(request: HttpRequest, account_id: str) -> HttpResponse:
     account = get_object_or_404(MetaAdAccount, account_id=account_id, is_active=True)
     date_str = request.POST.get("date") or timezone.localdate().isoformat()
-    pull_account_metrics_sync(account_id=account.account_id, date=date_str)
+    pull_account_metrics_sync(account_id=account.account_id, date=date_str, source="manual")
     if getattr(request, "htmx", False):
         return render(
             request,

@@ -83,7 +83,12 @@ module = ["celery", "celery.*", "django_celery_beat", "django_celery_beat.*"]
 ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
-module = ["apps.design_system.tests.*", "apps.accounts.tests.*", "apps.clients.tests.*"]
+module = [
+  "apps.design_system.tests.*",
+  "apps.accounts.tests.*",
+  "apps.clients.tests.*",
+  "apps.dashboard.tests.*",
+]
 ignore_errors = true
 
 [tool.django-stubs]
