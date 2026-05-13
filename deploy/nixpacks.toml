@@ -1,0 +1,17 @@
+[phases.setup]
+nixPkgs = ["python313", "nodejs_22", "uv"]
+
+[phases.install]
+cmds = [
+  "uv sync --frozen --no-dev",
+  "cd frontend && npm ci --include=dev"
+]
+
+[phases.build]
+cmds = [
+  "cd frontend && npm run build",
+  "uv run python manage.py collectstatic --noinput"
+]
+
+[start]
+cmd = "python manage.py migrate --noinput && gunicorn one.wsgi:application --workers 3 --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT"

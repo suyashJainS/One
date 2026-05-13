@@ -1,0 +1,10 @@
+[build]
+builder = "nixpacks"
+nixpacksConfigPath = "deploy/nixpacks.toml"
+
+[deploy]
+healthcheckPath = "/healthz"
+healthcheckTimeout = 30
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 3
+startCommand = "python manage.py migrate --noinput && gunicorn one.wsgi:application --workers 3 --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT"
