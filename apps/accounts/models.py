@@ -13,11 +13,13 @@ class UserProfile(models.Model):
     )
     timezone = models.CharField(max_length=40, default="Asia/Kolkata")
     is_approved = models.BooleanField(default=False)
-    # default_account: added in Phase G after clients.MetaAdAccount exists
-    # default_account = models.ForeignKey(
-    #     "clients.MetaAdAccount", on_delete=models.SET_NULL,
-    #     null=True, blank=True, related_name="+",
-    # )
+    default_account = models.ForeignKey(
+        "clients.MetaAdAccount",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="+",
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:

@@ -79,11 +79,13 @@ class APIRequestLog(models.Model):
         blank=True,
         related_name="api_request_logs",
     )
-    # client FK added in Task G1 (clients app does not yet exist)
-    # client = models.ForeignKey(
-    #     "clients.Client", on_delete=models.SET_NULL, null=True, blank=True,
-    #     related_name="api_request_logs",
-    # )
+    client = models.ForeignKey(
+        "clients.Client",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="api_request_logs",
+    )
     request_id = models.CharField(max_length=64, blank=True, default="")
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
 

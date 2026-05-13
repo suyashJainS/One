@@ -57,7 +57,7 @@ ignore = ["S101", "PLR0913", "PLC0415"]  # allow asserts in tests, allow many ar
 
 [tool.ruff.lint.per-file-ignores]
 "**/tests/**" = ["S105", "S106", "PLR2004"]
-"**/migrations/*.py" = ["E501"]
+"**/migrations/*.py" = ["E501", "RUF012"]
 
 [tool.ruff.format]
 quote-style = "double"
