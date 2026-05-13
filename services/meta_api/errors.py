@@ -50,7 +50,8 @@ _HTTP_SERVER_ERROR_THRESHOLD = 500
 
 
 def classify(status_code: int, body: dict[str, Any]) -> MetaAPIError:
-    error = body.get("error", {}) if isinstance(body, dict) else {}
+    raw_error = body.get("error", {}) if isinstance(body, dict) else {}
+    error = raw_error if isinstance(raw_error, dict) else {}
     code = error.get("code")
     subcode = error.get("error_subcode")
     message = error.get("message", "")

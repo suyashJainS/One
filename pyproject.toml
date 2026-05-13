@@ -45,6 +45,7 @@ dev = [
   "django-debug-toolbar>=4.4",
   "pre-commit>=3.8",
   "playwright>=1.47",
+  "respx>=0.23.1",
 ]
 
 [tool.ruff]
