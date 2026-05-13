@@ -1,23 +1,20 @@
-"""Custom encrypted field using Fernet symmetric encryption.
+"""Field-level encryption for sensitive strings using Fernet.
 
-django-cryptography 1.1 is incompatible with Django 5.2+ (it imports
-django.utils.baseconv which was removed). This module provides a drop-in
-`encrypt()` decorator that wraps a model field with transparent Fernet
-encryption stored as binary in the database.
+We rolled our own minimal wrapper because `django-cryptography` 1.1 is
+incompatible with Django 5.x (it imports `django.utils.baseconv`, removed in 5.0).
 
-Usage:
-    access_token = encrypt(models.TextField(blank=True))
-
-Settings expected:
-    CRYPTOGRAPHY_KEY  — a base64-url-safe Fernet key (32 url-safe bytes).
-                        If None the Django SECRET_KEY is used to derive one.
+Limitations:
+- TextField-only. Stores ciphertext as BinaryField.
+- CRYPTOGRAPHY_KEY (Fernet key) is preferred; falls back to deriving a key
+  from SECRET_KEY via SHA-256 if not set. **Rotating SECRET_KEY when no
+  CRYPTOGRAPHY_KEY is configured will permanently break decryption of
+  existing tokens.** Always set CRYPTOGRAPHY_KEY in production.
 """
 
 from __future__ import annotations
 
 import base64
 import hashlib
-import pickle
 from typing import Any
 
 from cryptography.fernet import Fernet, InvalidToken
@@ -37,16 +34,16 @@ def _get_fernet() -> Fernet:
     return Fernet(fernet_key)
 
 
-def _encrypt_value(value: object) -> bytes:
+def _encrypt_value(value: str) -> bytes:
     fernet = _get_fernet()
-    return fernet.encrypt(pickle.dumps(value))
+    return fernet.encrypt(value.encode("utf-8"))
 
 
-def _decrypt_value(data: bytes) -> object:
+def _decrypt_value(data: bytes) -> str | None:
     fernet = _get_fernet()
     try:
-        return pickle.loads(fernet.decrypt(data))  # noqa: S301
-    except (InvalidToken, Exception):
+        return fernet.decrypt(data).decode("utf-8")
+    except InvalidToken:
         return None
 
 
@@ -79,7 +76,7 @@ def _build_encrypted_field_class(
     ) -> Any:
         value = models.Field.get_db_prep_value(self, value, connection, prepared)
         if value is not None:
-            return connection.Database.Binary(_encrypt_value(value))
+            return connection.Database.Binary(_encrypt_value(str(value)))
         return value
 
     def get_db_prep_save(

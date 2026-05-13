@@ -15,6 +15,7 @@ class AdAccountInline(admin.TabularInline):  # type: ignore[type-arg]
     model = MetaAdAccount
     extra = 0
     fields = ("account_id", "account_name", "currency", "is_active", "last_sync_at")
+    readonly_fields = ("last_sync_at",)
 
 
 @admin.register(Client)

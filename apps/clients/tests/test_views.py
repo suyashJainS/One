@@ -44,3 +44,14 @@ def test_new_client_creates_record(client: DjangoClient, approved_user) -> None:
     )
     assert response.status_code == 200
     assert Client.objects.filter(slug="testco").exists()
+
+
+@pytest.mark.django_db
+def test_access_token_not_echoed_on_validation_error(client: DjangoClient, approved_user) -> None:
+    client.force_login(approved_user)
+    response = client.post(
+        "/clients/new/",
+        data={"name": "", "slug": "valid-slug", "access_token": "EAAB-test-leak-XYZ"},
+    )
+    assert response.status_code in (200, 400)
+    assert b"EAAB-test-leak-XYZ" not in response.content
