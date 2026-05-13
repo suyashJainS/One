@@ -1,4 +1,5 @@
 """Production settings — Railway."""
+
 from .base import *  # noqa: F403
 
 DEBUG = False
@@ -19,14 +20,15 @@ X_FRAME_OPTIONS = "DENY"
 
 # CSRF trusted origins (Railway)
 import os  # noqa: E402
+
 _railway = os.environ.get("RAILWAY_PUBLIC_DOMAIN", "")
 CSRF_TRUSTED_ORIGINS = [f"https://{_railway}"] if _railway else []
 ALLOWED_HOSTS = [_railway] if _railway else []
 
 # Sentry
 import sentry_sdk  # noqa: E402
-from sentry_sdk.integrations.django import DjangoIntegration  # noqa: E402
 from sentry_sdk.integrations.celery import CeleryIntegration  # noqa: E402
+from sentry_sdk.integrations.django import DjangoIntegration  # noqa: E402
 
 if SENTRY_DSN := env("SENTRY_DSN", default=""):  # noqa: F405
     sentry_sdk.init(
@@ -45,3 +47,8 @@ LOGGING = {
     "handlers": {"console": {"class": "logging.StreamHandler", "formatter": "json"}},
     "root": {"handlers": ["console"], "level": "INFO"},
 }
+
+if not CRYPTOGRAPHY_KEY:  # noqa: F405
+    raise RuntimeError("FERNET_KEY env var must be set in production")
+if not SECRET_KEY or SECRET_KEY.startswith("dev-"):  # noqa: F405
+    raise RuntimeError("DJANGO_SECRET_KEY must be set to a real value in production")
