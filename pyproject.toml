@@ -79,6 +79,10 @@ ignore_missing_imports = true
 ignore_errors = true
 
 [[tool.mypy.overrides]]
+module = ["celery", "celery.*", "django_celery_beat", "django_celery_beat.*"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
 module = ["apps.design_system.tests.*", "apps.accounts.tests.*", "apps.clients.tests.*"]
 ignore_errors = true
 
