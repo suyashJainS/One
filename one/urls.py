@@ -17,4 +17,5 @@ urlpatterns = [
     path("robots.txt", TemplateView.as_view(template_name="robots.txt", content_type="text/plain")),
     path("admin/", admin.site.urls),
     path("auth/", include("allauth.urls")),
+    path("design-system/", include("apps.design_system.urls")),
 ]
