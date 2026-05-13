@@ -168,3 +168,7 @@ META_FALLBACK_TOKEN = env("META_FALLBACK_TOKEN", default="")
 
 # Owner allowlist seed (read once on migration)
 OWNER_EMAILS = env.list("OWNER_EMAILS", default=[])
+
+# Facebook / Meta OAuth (allauth socialaccount)
+FACEBOOK_OAUTH_CLIENT_ID = env("FACEBOOK_OAUTH_CLIENT_ID", default="")
+FACEBOOK_OAUTH_CLIENT_SECRET = env("FACEBOOK_OAUTH_CLIENT_SECRET", default="")
