@@ -163,9 +163,8 @@ CONTENT_SECURITY_POLICY = {
     },
 }
 
-# Encryption (django-cryptography)
+# Encryption key for Fernet field (apps/clients/fields.py)
 CRYPTOGRAPHY_KEY = env("FERNET_KEY", default=None)
-CRYPTOGRAPHY_SALT = "one.encryption"
 
 # Meta API
 META_API_VERSION = env("META_API_VERSION", default="v22.0")

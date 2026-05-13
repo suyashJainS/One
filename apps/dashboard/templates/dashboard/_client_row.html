@@ -16,6 +16,7 @@
               hx-post="{% url 'dashboard:refresh-account' a.account_id %}"
               hx-target="#client-{{ summary.client_slug }}"
               hx-swap="outerHTML">Refresh {{ a.account_id }}</button>
+      {% if refresh_error and refresh_error_account == a.account_id %}<span class="ml-1 text-xs text-red-600">{{ refresh_error }}</span>{% endif %}
     {% endfor %}
   </td>
 </tr>

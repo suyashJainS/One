@@ -8,7 +8,7 @@ import pytest
 from django.contrib.auth import get_user_model
 from django.test import Client as DjangoClient
 
-from apps.clients.models import Client, MetaAdAccount
+from apps.clients.models import Client, ClientMetaCredentials, MetaAdAccount
 from apps.dashboard.models import DailyMetricsCache
 
 User = get_user_model()
@@ -82,3 +82,27 @@ def test_overview_handles_no_data(
     response = client.get("/dashboard/")
     assert response.status_code == 200
     assert b"No clients yet" in response.content or b"No data" in response.content
+
+
+@pytest.mark.django_db
+def test_refresh_account_handles_auth_error_gracefully(
+    client: DjangoClient, approved_user: Any, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    c = Client.objects.create(name="Acme", slug="acme")
+    ClientMetaCredentials.objects.create(client=c, access_token="bad")
+    account = MetaAdAccount.objects.create(client=c, account_id="act_99", currency="USD")
+
+    from services.meta_api.errors import AuthError
+
+    def fake_pull(**kwargs: Any) -> None:
+        raise AuthError(status_code=401, code=190, message="Invalid OAuth token")
+
+    monkeypatch.setattr("apps.dashboard.views.pull_account_metrics_sync", fake_pull)
+
+    client.force_login(approved_user)
+    response = client.post(
+        f"/dashboard/accounts/{account.account_id}/refresh/",
+        HTTP_HX_REQUEST="true",
+    )
+    assert response.status_code in (200, 502)
+    assert b"Auth error" in response.content

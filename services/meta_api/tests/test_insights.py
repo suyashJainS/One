@@ -11,7 +11,7 @@ from services.meta_api.insights import DailyInsights, fetch_daily_insights
 
 
 @pytest.fixture(autouse=True)
-def _clear_cache() -> Generator[None, None, None]:
+def _clear_cache() -> Generator[None]:
     cache.clear()
     yield
     cache.clear()

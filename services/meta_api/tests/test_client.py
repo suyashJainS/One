@@ -12,7 +12,7 @@ from services.meta_api.errors import AuthError, InvalidParamError, RateLimitErro
 
 
 @pytest.fixture(autouse=True)
-def _clear_cache() -> Generator[None, None, None]:
+def _clear_cache() -> Generator[None]:
     cache.clear()
     yield
     cache.clear()

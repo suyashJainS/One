@@ -85,6 +85,6 @@ class ActivityLogMiddleware:
 def _client_ip(request: HttpRequest) -> str | None:
     forwarded: str = request.META.get("HTTP_X_FORWARDED_FOR", "")
     if forwarded:
-        return forwarded.split(",")[0].strip()
+        return forwarded.split(",", maxsplit=1)[0].strip()
     remote: str = request.META.get("REMOTE_ADDR", "")
     return remote or None

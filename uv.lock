@@ -547,18 +547,6 @@ socialaccount = [
 ]
 
 [[package]]
-name = "django-appconf"
-version = "1.2.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "django" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/d1/a2/e58bec8d7941b914af52a67c35b5709eceed2caa2848f28437f1666ed668/django_appconf-1.2.0.tar.gz", hash = "sha256:15a88d60dd942d6059f467412fe4581db632ef03018a3c183fb415d6fc9e5cec", size = 16127, upload-time = "2025-11-08T15:46:27.304Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/e8/e6/4c34d94dfb74bbcbc489606e61f1924933de30d22c593dd1f429f35fbd7f/django_appconf-1.2.0-py3-none-any.whl", hash = "sha256:b81bce5ef0ceb9d84df48dfb623a32235d941c78cc5e45dbb6947f154ea277f4", size = 6500, upload-time = "2025-11-08T15:46:25.957Z" },
-]
-
-[[package]]
 name = "django-celery-beat"
 version = "2.9.0"
 source = { registry = "https://pypi.org/simple" }
@@ -585,19 +573,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/49/bf/56875c0a31f601bd1e6d19eecd58a8e40ec6cf793e8d12043b6dc8196b06/django_cotton-2.6.2.tar.gz", hash = "sha256:d4131517d8ec1080495a4779fb8d984264d671e6c850f4fa34c14822817dd693", size = 31854, upload-time = "2026-03-13T23:05:57.322Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/0b/b0/be3e3d8654196f69390ed0a2a459e80066a345e184d8364b178fdf149dcd/django_cotton-2.6.2-py3-none-any.whl", hash = "sha256:292d35ad2d2c1da4ae21e688cc44aa18f84716ab64a619ff7b7296e0e30275fc", size = 30910, upload-time = "2026-03-13T23:05:58.258Z" },
-]
-
-[[package]]
-name = "django-cryptography"
-version = "1.1"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "cryptography" },
-    { name = "django" },
-    { name = "django-appconf" },
-]
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/e4/ba/d5e1264c60a86cebb4b63f1dae8220e15dd751e46d24229ee0803f19a66b/django_cryptography-1.1-py2.py3-none-any.whl", hash = "sha256:93702fcf0d75865d55362f20ecd95274c4eef60ccdce46cbdade0420acee07cb", size = 11107, upload-time = "2022-04-06T04:27:28.34Z" },
 ]
 
 [[package]]
@@ -1134,7 +1109,6 @@ dependencies = [
     { name = "django-allauth", extra = ["socialaccount"] },
     { name = "django-celery-beat" },
     { name = "django-cotton" },
-    { name = "django-cryptography" },
     { name = "django-csp" },
     { name = "django-environ" },
     { name = "django-htmx" },
@@ -1180,7 +1154,6 @@ requires-dist = [
     { name = "django-allauth", extras = ["socialaccount"], specifier = ">=65.0" },
     { name = "django-celery-beat", specifier = ">=2.7" },
     { name = "django-cotton", specifier = ">=1.4" },
-    { name = "django-cryptography", specifier = ">=1.1" },
     { name = "django-csp", specifier = ">=3.8" },
     { name = "django-environ", specifier = ">=0.11" },
     { name = "django-htmx", specifier = ">=1.19" },

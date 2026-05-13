@@ -3,6 +3,7 @@ from __future__ import annotations
 import csv
 import datetime as dt
 
+import httpx
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, render
@@ -10,6 +11,14 @@ from django.utils import timezone
 from django.views.decorators.http import require_http_methods
 
 from apps.clients.models import Client, MetaAdAccount
+from services.meta_api.errors import (
+    AuthError,
+    FatalError,
+    InvalidParamError,
+    RateLimitError,
+    TransientError,
+)
+from services.meta_api.tokens import TokenNotFound
 
 from .models import DailyMetricsCache
 from .services import ClientSummary, overview_data
@@ -55,14 +64,31 @@ def client_detail(request: HttpRequest, slug: str) -> HttpResponse:
 def refresh_account(request: HttpRequest, account_id: str) -> HttpResponse:
     account = get_object_or_404(MetaAdAccount, account_id=account_id, is_active=True)
     date_str = request.POST.get("date") or timezone.localdate().isoformat()
-    pull_account_metrics_sync(account_id=account.account_id, date=date_str, source="manual")
+    error_message = ""
+    try:
+        pull_account_metrics_sync(account_id=account.account_id, date=date_str, source="manual")
+    except AuthError as exc:
+        error_message = f"Auth error: please refresh the access token. ({exc})"
+    except RateLimitError as exc:
+        retry = getattr(exc, "retry_after_seconds", 60)
+        error_message = f"Rate limited by Meta. Try again in {retry}s."
+    except (TokenNotFound, InvalidParamError, TransientError, FatalError) as exc:
+        error_message = f"Meta API error: {exc}"
+    except httpx.HTTPError as exc:
+        error_message = f"Network error: {exc}"
+
     if getattr(request, "htmx", False):
+        summary = _single_client_summary(account.client)
         return render(
             request,
             "dashboard/_client_row.html",
-            {"summary": _single_client_summary(account.client)},
+            {
+                "summary": summary,
+                "refresh_error": error_message,
+                "refresh_error_account": account.account_id if error_message else None,
+            },
         )
-    return HttpResponse("ok")
+    return HttpResponse(error_message or "ok", status=200 if not error_message else 502)
 
 
 def _single_client_summary(client: Client) -> ClientSummary | None:
