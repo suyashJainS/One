@@ -1,0 +1,8 @@
+<c-vars title="" subtitle="" />
+<div class="mb-6 flex items-center justify-between">
+  <div>
+    <h1 class="text-xl font-semibold text-ink">{{ title }}</h1>
+    {% if subtitle %}<p class="text-sm text-ink-muted">{{ subtitle }}</p>{% endif %}
+  </div>
+  <div class="flex items-center gap-2">{{ slot }}</div>
+</div>
