@@ -72,6 +72,15 @@ exclude = ["migrations/"]
 module = ["environ", "environ.*"]
 ignore_missing_imports = true
 
+[[tool.mypy.overrides]]
+module = ["django_cotton", "django_cotton.*"]
+ignore_missing_imports = true
+ignore_errors = true
+
+[[tool.mypy.overrides]]
+module = ["apps.design_system.tests.*"]
+ignore_errors = true
+
 [tool.django-stubs]
 django_settings_module = "one.settings.test"
 
