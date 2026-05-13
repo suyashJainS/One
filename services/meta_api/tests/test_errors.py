@@ -1,3 +1,5 @@
+import pytest
+
 from services.meta_api.errors import (
     AuthError,
     FatalError,
@@ -42,3 +44,9 @@ def test_classify_500_transient() -> None:
 def test_classify_unknown_becomes_fatal() -> None:
     err = classify(400, {"error": {"code": 9999, "message": "Mystery"}})
     assert isinstance(err, FatalError)
+
+
+@pytest.mark.parametrize("code", list(range(80000, 80009)))
+def test_classify_all_80000_series_as_rate_limit(code: int) -> None:
+    err = classify(400, {"error": {"code": code, "message": "Throttled"}})
+    assert isinstance(err, RateLimitError)

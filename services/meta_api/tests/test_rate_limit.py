@@ -36,3 +36,12 @@ def test_record_usage_high_call_count_triggers_cooldown() -> None:
     )
     record_usage("act_1", headers_value)
     assert in_cooldown("act_1")
+
+
+def test_record_usage_canonical_list_format_triggers_cooldown() -> None:
+    headers_value = (
+        '{"act_id_1":[{"call_count":95,"total_cputime":10,"total_time":10,'
+        '"estimated_time_to_regain_access":30}]}'
+    )
+    record_usage("act_1", headers_value)
+    assert in_cooldown("act_1")

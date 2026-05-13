@@ -83,3 +83,23 @@ def test_400_code_100_raises_invalid_param(account: MetaAdAccount) -> None:
     client = MetaAPIClient()
     with pytest.raises(InvalidParamError):
         client.get(account, "/")
+
+
+@pytest.mark.django_db
+@respx.mock
+def test_api_result_returned_even_if_log_write_fails(monkeypatch: pytest.MonkeyPatch) -> None:
+    c = Client.objects.create(name="Acme", slug="acme")
+    ClientMetaCredentials.objects.create(client=c, access_token="T")
+    account = MetaAdAccount.objects.create(client=c, account_id="act_1", currency="USD")
+    respx.get("https://graph.facebook.com/v22.0/act_1").mock(
+        return_value=Response(200, json={"name": "Acme"})
+    )
+
+    def _raise(*args: object, **kwargs: object) -> None:
+        raise RuntimeError("simulated log failure")
+
+    from apps.core.models import APIRequestLog
+
+    monkeypatch.setattr(APIRequestLog.objects, "create", _raise)
+    result = MetaAPIClient().get(account, "/")
+    assert result["name"] == "Acme"  # API result still returned despite logging failure

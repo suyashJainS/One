@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 import time
 from typing import Any
 
@@ -14,6 +15,8 @@ from apps.core.models import APIRequestLog
 from .errors import RateLimitError, TransientError, classify
 from .rate_limit import cooldown_seconds, in_cooldown, record_throttle, record_usage
 from .tokens import resolve_token
+
+logger = logging.getLogger(__name__)
 
 GRAPH_BASE = "https://graph.facebook.com"
 
@@ -30,7 +33,11 @@ def _build_url(api_version: str, account_id: str, path: str) -> str:
     clean = path.lstrip("/").rstrip("/")
 
     if f"/{account_id}" in path:
-        # Caller already included the account ID in path
+        # Caller already included the account ID in path (with leading slash)
+        return f"{GRAPH_BASE}/{api_version}/{clean}"
+
+    if clean.startswith(f"{account_id}/") or clean == account_id:
+        # Caller passed account_id without leading slash, e.g. "act_1/insights"
         return f"{GRAPH_BASE}/{api_version}/{clean}"
 
     if not clean:
@@ -165,15 +172,18 @@ class MetaAPIClient:
         duration_ms: int,
         error: str,
     ) -> None:
-        APIRequestLog.objects.create(
-            service="meta_api",
-            method=method,
-            url=url,
-            query_params=params,
-            request_body=body,
-            status_code=status,
-            response_body=response_body if isinstance(response_body, dict | list) else None,
-            duration_ms=duration_ms,
-            error=error,
-            client=account.client,
-        )
+        try:
+            APIRequestLog.objects.create(
+                service="meta_api",
+                method=method,
+                url=url,
+                query_params=params,
+                request_body=body,
+                status_code=status,
+                response_body=response_body if isinstance(response_body, dict | list) else None,
+                duration_ms=duration_ms,
+                error=error,
+                client=account.client,
+            )
+        except Exception:
+            logger.exception("APIRequestLog write failed")

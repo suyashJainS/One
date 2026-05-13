@@ -42,7 +42,7 @@ class FatalError(MetaAPIError):
 
 # Codes from https://developers.facebook.com/docs/marketing-api/error-reference
 _AUTH_CODES = {190, 102, 200, 459, 463, 467}
-_RATE_LIMIT_CODES = {4, 17, 32, 613, 80000, 80001, 80002, 80003, 80004, 80005, 80006, 80008}
+_RATE_LIMIT_CODES = frozenset({4, 17, 32, 613, *range(80000, 80009)})
 _INVALID_CODES = {100, 110, 803}
 
 _HTTP_UNAUTHORIZED = 401
