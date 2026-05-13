@@ -1,0 +1,21 @@
+<tr id="client-{{ summary.client_slug }}">
+  <td class="px-4 py-2 font-medium">
+    <a class="text-brand-600 hover:underline" href="{% url 'dashboard:client-detail' summary.client_slug %}">{{ summary.client_name }}</a>
+  </td>
+  <td class="px-4 py-2">${{ summary.today.spend|floatformat:0 }}</td>
+  <td class="px-4 py-2 text-ink-muted">${{ summary.yesterday.spend|floatformat:0 }}</td>
+  <td class="px-4 py-2">{{ summary.today.roas|default:'—'|floatformat:2 }}{% if summary.today.roas %}×{% endif %}</td>
+  <td class="px-4 py-2">{{ summary.today.leads }}</td>
+  <td class="px-4 py-2 text-xs text-ink-muted">
+    {% for a in summary.accounts %}<span title="{{ a.account_name }}">{{ a.account_id }}</span>{% if not forloop.last %}, {% endif %}{% endfor %}
+  </td>
+  <td class="px-4 py-2">
+    {% for a in summary.accounts %}
+      <button type="button"
+              class="text-xs text-brand-600 hover:underline"
+              hx-post="{% url 'dashboard:refresh-account' a.account_id %}"
+              hx-target="#client-{{ summary.client_slug }}"
+              hx-swap="outerHTML">Refresh {{ a.account_id }}</button>
+    {% endfor %}
+  </td>
+</tr>

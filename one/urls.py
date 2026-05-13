@@ -20,4 +20,5 @@ urlpatterns = [
     path("auth/", include("allauth.urls")),
     path("design-system/", include("apps.design_system.urls")),
     path("clients/", include("apps.clients.urls")),
+    path("dashboard/", include("apps.dashboard.urls")),
 ]
