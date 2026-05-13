@@ -19,4 +19,5 @@ urlpatterns = [
     path("auth/", include("apps.accounts.urls")),
     path("auth/", include("allauth.urls")),
     path("design-system/", include("apps.design_system.urls")),
+    path("clients/", include("apps.clients.urls")),
 ]

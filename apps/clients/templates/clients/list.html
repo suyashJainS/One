@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<c-page-header title="Clients" subtitle="Manage your ad-account clients">
+  <a href="{% url 'clients:new' %}"><c-button>+ New client</c-button></a>
+</c-page-header>
+
+{% if clients %}
+<c-data-table columns="Name,Slug,Status,Target ROAS,Target CPL,Actions">
+  {% for c in clients %}
+  <tr>
+    <td class="px-4 py-2 font-medium">{{ c.name }}</td>
+    <td class="px-4 py-2 text-ink-muted">{{ c.slug }}</td>
+    <td class="px-4 py-2">
+      {% if c.is_active %}<span class="text-emerald-600">Active</span>{% else %}<span class="text-ink-muted">Paused</span>{% endif %}
+    </td>
+    <td class="px-4 py-2">{{ c.target_roas|default:"—" }}</td>
+    <td class="px-4 py-2">{{ c.target_cpl|default:"—" }}</td>
+    <td class="px-4 py-2"><a class="text-brand-600 hover:underline" href="{% url 'clients:edit' c.slug %}">Edit</a></td>
+  </tr>
+  {% endfor %}
+</c-data-table>
+{% else %}
+  <c-empty-state title="No clients yet" description="Add your first client to start syncing Meta metrics.">
+    <a href="{% url 'clients:new' %}"><c-button>+ New client</c-button></a>
+  </c-empty-state>
+{% endif %}
+{% endblock %}

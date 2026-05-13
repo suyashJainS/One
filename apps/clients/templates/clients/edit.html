@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<c-page-header title="{% if is_new %}New client{% else %}Edit {{ client.name }}{% endif %}" />
+<c-card>
+  <form method="post">
+    {% csrf_token %}
+    {% for field in form %}
+      <c-form-field label="{{ field.label }}" name="{{ field.name }}" type="{{ field.field.widget.input_type|default:'text' }}" value="{{ field.value|default_if_none:'' }}" error="{{ field.errors|join:', ' }}" />
+    {% endfor %}
+    <div class="flex justify-end gap-2"><c-button type="submit">Save</c-button></div>
+  </form>
+</c-card>
+{% endblock %}
