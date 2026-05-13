@@ -81,7 +81,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "apps.core.context_processors.request_id",
             ],
-            "builtins": ["django_cotton.templatetags.cotton"],
+            "builtins": ["django_cotton.templatetags.cotton", "apps.core.templatetags.core_extras"],
         },
     },
 ]

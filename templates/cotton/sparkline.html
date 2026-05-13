@@ -1,0 +1,11 @@
+<c-vars id="" height="40" data="[]" color="#4f46e5" />
+<div data-chart-target="{{ id }}" style="height:{{ height }}px"></div>
+<script type="application/json" data-chart-id="{{ id }}">
+{
+  "chart": {"type": "line", "height": {{ height }}, "sparkline": {"enabled": true}, "animations": {"enabled": false}},
+  "stroke": {"width": 2, "curve": "smooth"},
+  "colors": ["{{ color }}"],
+  "series": [{"data": {{ data }}}],
+  "tooltip": {"enabled": false}
+}
+</script>

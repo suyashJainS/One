@@ -1,0 +1,9 @@
+<c-vars label="" name="" type="text" value="" error="" help="" />
+<div class="mb-4">
+  <label for="id_{{ name }}" class="mb-1 block text-sm font-medium text-ink">{{ label }}</label>
+  <input id="id_{{ name }}" name="{{ name }}" type="{{ type }}" value="{{ value }}"
+         class="block w-full rounded border border-surface-border bg-surface px-3 py-1.5 text-sm text-ink focus:border-brand-600 focus:ring-2 focus:ring-brand-100"
+         {{ attrs }} />
+  {% if error %}<p class="mt-1 text-xs text-red-600">{{ error }}</p>{% endif %}
+  {% if help %}<p class="mt-1 text-xs text-ink-muted">{{ help }}</p>{% endif %}
+</div>

@@ -1,0 +1,13 @@
+<c-vars columns="" />
+<div class="stripe-card overflow-hidden">
+  <table class="min-w-full text-sm">
+    <thead class="bg-surface-alt text-2xs uppercase tracking-wide text-ink-muted">
+      <tr>
+        {% for col in columns|split:"," %}
+          <th class="px-4 py-2 text-left font-medium">{{ col }}</th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-surface-border">{{ slot }}</tbody>
+  </table>
+</div>

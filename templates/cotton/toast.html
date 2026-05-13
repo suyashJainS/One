@@ -1,0 +1,10 @@
+<c-vars variant="info" />
+<div role="status"
+     class="rounded border px-3 py-2 text-sm
+            {% if variant == 'success' %}border-emerald-200 bg-emerald-50 text-emerald-800
+            {% elif variant == 'danger' %}border-red-200 bg-red-50 text-red-800
+            {% elif variant == 'warn' %}border-amber-200 bg-amber-50 text-amber-800
+            {% else %}border-surface-border bg-surface text-ink{% endif %}"
+     x-data="{show:true}" x-show="show" x-init="setTimeout(()=>show=false,4000)">
+  {{ slot }}
+</div>
